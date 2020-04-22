@@ -1,7 +1,7 @@
 ---
 layout: post
 title:      "How Did I Decide to Make a Switch from Chemistry to Data Science?"
-date:       2020-04-22 15:18:13 +0000
+date:       2020-04-22 11:18:14 -0400
 permalink:  how_did_i_decide_to_make_a_switch_from_chemistry_to_data_science
 ---
 
