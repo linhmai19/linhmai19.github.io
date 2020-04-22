@@ -1,11 +1,11 @@
 # Site settings
 author: Linh Mai
-title: 
+title: My journey 
 header-img: img/home-bg.png
 email: linhnp.mai@gmail.com
 copyright_name: Linh Mai
 description: > # this means to ignore newlines until "baseurl:"
-  
+  DS
 baseurl: "" # the subpath of your site, e.g. /blog
 twitter_username: 
 github_username:  linhmai19
