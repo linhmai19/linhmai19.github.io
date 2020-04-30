@@ -1,7 +1,7 @@
 ---
 layout: post
 title:      "EFFECTS ON MOVIES' POPULARITY AND BOX OFFICE REVENUE "
-date:       2020-04-30 20:49:43 +0000
+date:       2020-04-30 16:49:44 -0400
 permalink:  effects_on_movies_popularity_and_box_office_revenue
 ---
 
