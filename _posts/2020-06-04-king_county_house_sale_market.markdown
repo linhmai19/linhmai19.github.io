@@ -1,7 +1,7 @@
 ---
 layout: post
 title:      "KING COUNTY HOUSE SALE MARKET"
-date:       2020-06-04 20:33:18 +0000
+date:       2020-06-04 16:33:19 -0400
 permalink:  king_county_house_sale_market
 ---
 
@@ -21,19 +21,19 @@ After dealing with data type format and missing values, I also need to check and
 I first started to explore the ‘bedrooms’ column and figured out that the mean price of the house start to fluctuate when the number of bedrooms gets to 8 or more. Therefore, I created a separated data frame and limit the number of bedrooms to smaller than or equal to 7. These two data frames are used for later regression comparison to see whether there is a significant improve in modeling. 
 
 ```
-bedrooms;
-1     313389.652632;
-2     388020.048943;
-3     431077.318624;
-4     523458.969920;
-5     551074.785948;
-6     560732.697561;
-7     608828.172414;
-8     588444.444444;
-9     670999.750000;
-10    655000.000000;
-11    520000.000000;
-Name: price, dtype: float64;
+bedrooms
+1     313389.652632
+2     388020.048943
+3     431077.318624
+4     523458.969920
+5     551074.785948
+6     560732.697561
+7     608828.172414
+8     588444.444444
+9     670999.750000
+10    655000.000000
+11    520000.000000
+Name: price, dtype: float64
 ```
 
 In order to have a rough idea of which features have good impacts on home price, taking a look at correlation relationship between each feature and the target ‘price’ and also between each feature would help. The features that are highly correlated to 'price' are: 'grade', 'sqft_living', 'sqft_living15', 'sqft_above', 'lat', 'bathrooms', and 'bedrooms'. However, 'sqft_living' is highly correlated to 'sqft_above', 'sqft_living15', and 'bathrooms'. When building a model later, 'sqft_living' is not incorporated with other three features. However, other features can be incorporated together separately since they are not highly correlated to each other.
@@ -74,16 +74,12 @@ OLS regression was calculated based on the same features as above: 'grade', 'lat
 In this last model, OLS regression was calculated without 'bedrooms' feature because this feature seemed not helping with improving the model. On the other hand, the next recommended features from recursive feature elimination were added: 'condition' and 'waterfront'. The result showed that R-squared, Adj.R-squared are the highest (=0.604), compared to other 3 models. The skewness is also the lowest or nearest to 0 (=0.065) which indicates the normally-distributed errors being symmetrically distributed about the mean. The Kurtosis value is also closest to 3 (=3.482) which indicates its closeness to normal distribution. 
 
 ## ASSUMPTIONS CHECK AND MODEL VALIDATION
-1.	Normality is checked by using Q-Q plot. This type of plot can help compare error residuals against a standard normal distribution. There are no major deviations from the normal distribution line, proving the earlier assumption of normality.
+1)	Normality is checked by using Q-Q plot. This type of plot can help compare error residuals against a standard normal distribution. There are no major deviations from the normal distribution line, proving the earlier assumption of normality.
 
-2.	In order to validate the multivariate linear regression model calculated with statsmodels, train-test-split and cross validation were performed. Train-test- split splits the data into two sections: one serves as the training data set, and the other serves as the testing data set. Each set generates a mean squared error, and the difference between the two will summarize how well the predicted values compare to actual values. 
-The train-test-split values calculated for this model had a negligible difference, suggesting the model is an appropriate fit. 
+2)	In order to validate the multivariate linear regression model calculated with statsmodels, train-test-split and cross validation were performed. Train-test- split splits the data into two sections: one serves as the training data set, and the other serves as the testing data set. Each set generates a mean squared error, and the difference between the two will summarize how well the predicted values compare to actual values. 
+The train-test-split values calculated for this model had a negligible difference, suggesting the model is an appropriate fit. However, the train-test-split models calculates a slightly different mean squared error each time the model is run due to the random split of train and test data. For this reason, K-fold cross validation is a better method used to validate the multivariate linear regression. K-fold cross validation averages the individual results from multiple linear models which each use a different section of the test data set. K-fold, with 5, 10 and 20 partitions, was used to assess the mean squared error as well as the coefficient of determination for the model. The mean squared error came back exactly the same, while the coefficients of determination have very little difference.
 
-However, the train-test-split models calculates a slightly different mean squared error each time the model is run due to the random split of train and test data. For this reason, K-fold cross validation is a better method used to validate the multivariate linear regression. K-fold cross validation averages the individual results from multiple linear models which each use a different section of the test data set. K-fold, with 5, 10 and 20 partitions, was used to assess the mean squared error as well as the coefficient of determination for the model. The mean squared error came back exactly the same, while the coefficients of determination have very little difference.
-
-3.	After performing train-split test, the distribution of model residuals needed to be checked to ensure it follows a normal distribution and homoscedastic. This test was done by plotting two scatter plots between residuals of training/testing sets and the predicted values of logged price. In addition, the histograms of training/testing sets were also plotted. The results showed that the model residuals are normally distributed and homoscedastic. 
-
-As the model is confirmed to be a great fit, we can state according to the calculation that the R-squared value and the coefficient of determination, is around 0.60 for this model. This means that 60% of the variations in home prices are explained by the independent variables: 'grade', 'lat', 'bathrooms', 'condition', 'waterfront'
+3)	After performing train-split test, the distribution of model residuals needed to be checked to ensure it follows a normal distribution and homoscedastic. This test was done by plotting two scatter plots between residuals of training/testing sets and the predicted values of logged price. In addition, the histograms of training/testing sets were also plotted. The results showed that the model residuals are normally distributed and homoscedastic. As the model is confirmed to be a great fit, we can state according to the calculation that the R-squared value and the coefficient of determination, is around 0.60 for this model. This means that 60% of the variations in home prices are explained by the independent variables: 'grade', 'lat', 'bathrooms', 'condition', 'waterfront'
 
 ![](https://drive.google.com/file/d/1zgQr12q1I6OkYw46BuECCzTg2tI3kv4J/view)
 
@@ -91,14 +87,19 @@ As the model is confirmed to be a great fit, we can state according to the calcu
 
 ## THE FINAL MODEL 
  After performing all the tests to ensure that the chosen model is a great fit, the final model regression formula is done by inserting in all the corresponding coefficients of chosen features ('grade', 'lat', 'bathrooms', 'condition', 'waterfront') and the intercept from calculated OLS regression summary table:
-#### ln(price) = grade(0.207) + latitude(1.397) + bathrooms(0.114) + condition(0.099) + waterfront(0.602) - 55.58
+### ln(price) = grade(0.207) + latitude(1.397) + bathrooms(0.114) + condition(0.099) + waterfront(0.602) - 55.58
 
 ## COEFFICIENT INTERPRETATION
 The model was fitted in form of log(price). Therefore, the general interpretation for the log-transformed variable is as: 1 unit increase in X will lead to (exp(coefficient)-1)*100%.
+
 •	The coefficient of grade is 0.207. This can be interpreted as for one-unit increase in grade, the price of the house will increase by 23% (e0.207 = 1.23) ((1.23-1) 100) while keeping the other predictors constant
+
 •	The coefficient of the latitude is 1.397. This can be interpreted as for 1 unit increases in latitude, the price of the house will increase by 304% (e**(1.397) = 4.04)
+
 •	The coefficient of the bathrooms is 0.114. This can be interpreted as for 1 unit increases in the number of bathrooms, the price of the house will increase by 12% (e**(0.114) = 1.12)
+
 •	The coefficient of the condition is 0.099. This can be interpreted as for 1 unit increases in the condition, the price of the house will increase by 10% (e**(0.099) = 1.10)
+
 •	The coefficient of the waterfront is 0.602. This can be interpreted as for having a waterfront view, the price of the house will increase by 83% (e**(0.602) = 1.83)
 
 ## FUTURE ANALYSIS	
